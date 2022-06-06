@@ -65,7 +65,7 @@ int partition(Array* array, int left, int right){
 	while (low <= high){
 		while (array->array[low]<=pivot && low <= right) low++;
 		while (array->array[high]>=pivot && high >= left+1) high--;
-		if(low <= high)
+		if (low <= high)
 			swap(array, low, high);
 	}
 	swap(array, left, high);
@@ -75,9 +75,9 @@ int partition(Array* array, int left, int right){
 void q_sort(Array* array, int left, int right){
 	if (left >= right)
 		return;
-		int pivotIndex = partition(array, left, right);
-		q_sort(array, left, pivotIndex-1);
-		q_sort(array, pivotIndex+1, right);
+	int pivotIndex = partition(array, left, right);
+	q_sort(array, left, pivotIndex-1);
+	q_sort(array, pivotIndex+1, right);
 }
 //-----------------------------------------------------------
 
@@ -90,8 +90,9 @@ void q_sort(Array* array, int left, int right){
 
 void sequence_sort(Array* array)
 {
-	for (int i=0; i<array->len-1; i++){
-		for (int j=i+1; j<array->len; j++){
+	int i, j;
+	for (i=0; i<array->len-1; i++){
+		for (j=i+1; j<array->len; j++){
 			if (array->array[i] > array->array[j]){
 				swap(array, i, j);
 			}
@@ -120,8 +121,11 @@ void insertion_sort(Array* array)
 	int i, j, key;
 	for (i=1; i<array->len; i++){
 		key = array->array[i];
-		for (j=i; (j>0) && (array->array[j-1])>key; j--){
-			array->array[j] = array->array[j-1];
+		for (j=i; j>0; j--){
+			if (array->array[j-1] > key)
+				array->array[j] = array->array[j-1];
+			else
+				break;
 		}
 		array->array[j] = key;
 	}
@@ -130,10 +134,10 @@ void insertion_sort(Array* array)
 void bubble_sort(Array* array)
 {
 	int i, j;
-	for (i=array->len; i>1; i--){
-		for (j=1; j<i; j++){
-			if (array->array[j-1] > array->array[j])
-				swap(array, j-1, j);
+	for (i=0; i<array->len-1; i++){
+		for (j=0; j<(array->len-1)-i; j++){
+			if (array->array[j] > array->array[j+1])
+				swap(array, j, j+1);
 		}
 	}
 }

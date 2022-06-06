@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+
 void init_array(Array* array)
 {
 	array->len = 0;
@@ -56,32 +57,28 @@ void swap(Array* array, int i, int j){
 	array->array[j] = temp;
 }
 
-int partition(Array* array, int start, int end){
-	srand(time(NULL));
-	int key = start;
-	int i = start + 1;
-	int j = end;
-	while (i <= j){
-		while (i <= end && array->array[i] <= array->array[key])
-			i++;
-		while (j > start && array->array[j] >= array->array[key])
-			j--;
-		if (i > j)
-			swap(array, key, j);
-		else
-			swap(array, i, j);
+int partition(Array* array, int left, int right){
+	int key = left;
+	int pivot = array->array[key];
+	int low = left+1;
+	int high = right;
+	while (low <= high){
+		while (array->array[low]<=pivot && low <= right) low++;
+		while (array->array[high]>=pivot && high >= left+1) high--;
+		if(low <= high)
+			swap(array, low, high);
 	}
-	return j;
+	swap(array, left, high);
+	return high;
 }
 
-void q_sort(Array* array, int start, int end){
-	if (start >= end)
+void q_sort(Array* array, int left, int right){
+	if (left >= right)
 		return;
-	int pivotIndex = partition(array, start, end);
-	q_sort(array, start, pivotIndex-1);
-	q_sort(array, pivotIndex+1, end);
+		int pivotIndex = partition(array, left, right);
+		q_sort(array, left, pivotIndex-1);
+		q_sort(array, pivotIndex+1, right);
 }
-
 //-----------------------------------------------------------
 
 
@@ -112,7 +109,9 @@ void selection_sort(Array* array)
 				min = j;
 			}
 		}
-		swap(array, i, min);
+		if (i != min){
+			swap(array, i, min);
+		}
 	}
 }
 
@@ -141,5 +140,5 @@ void bubble_sort(Array* array)
 
 void quick_sort(Array* array)
 {
-	q_sort(array, 0, array->len);
+	q_sort(array, 0, array->len-1);
 }
